@@ -68,6 +68,7 @@
             text-align: left;
             font-size: 1rem;
             transition: all 0.2s ease;
+            width: 100%;
         }
 
         .opt-btn:hover {
@@ -76,15 +77,15 @@
         }
 
         .opt-btn.correct {
-            background-color: #27ae60;
-            color: white;
-            border-color: #27ae60;
+            background-color: #27ae60 !important;
+            color: white !important;
+            border-color: #27ae60 !important;
         }
 
         .opt-btn.wrong {
-            background-color: #e74c3c;
-            color: white;
-            border-color: #e74c3c;
+            background-color: #e74c3c !important;
+            color: white !important;
+            border-color: #e74c3c !important;
         }
 
         #result-screen {
@@ -125,7 +126,7 @@
         <div class="header">
             <span class="progress-text" id="progress-text">Soalan 1/5</span>
         </div>
-        <div class="question-text" id="question-text">Memuatkan soalan...</div>
+        <div class="question-text" id="question-text">Pemuatan soalan...</div>
         <div class="options-grid" id="options-grid"></div>
     </div>
 
@@ -177,7 +178,7 @@
 
     function loadQuestion() {
         const currentData = questions[currentIndex];
-        // Menggunakan backticks (`) untuk template literal
+        // PEMBETULAN: Menggunakan backticks ` untuk template literals
         progText.innerText = `Soalan ${currentIndex + 1} / ${questions.length}`;
         qText.innerText = currentData.q;
         optGrid.innerHTML = '';
@@ -218,7 +219,7 @@
     function showResults() {
         qScreen.style.display = 'none';
         rScreen.style.display = 'block';
-        // Menggunakan backticks (`) untuk paparan skor
+        // PEMBETULAN: Menggunakan backticks `
         document.getElementById('score-display').innerText = `${score}/${questions.length}`;
         
         let feedback = "";
@@ -229,6 +230,7 @@
         document.getElementById('feedback-text').innerText = feedback;
     }
 
+    // Memulakan kuiz
     loadQuestion();
 </script>
 
