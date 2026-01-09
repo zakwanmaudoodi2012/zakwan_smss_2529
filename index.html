@@ -125,7 +125,7 @@
         <div class="header">
             <span class="progress-text" id="progress-text">Soalan 1/5</span>
         </div>
-        <div class="question-text" id="question-text">Pemuatan soalan...</div>
+        <div class="question-text" id="question-text">Memuatkan soalan...</div>
         <div class="options-grid" id="options-grid"></div>
     </div>
 
@@ -142,27 +142,27 @@
         {
             q: "“Solatlah sambil berdiri. Jika tidak mampu, boleh duduk. Jika tidak mampu juga boleh sambil berbaring”. Petikan ini diambil dari:",
             options: ["Al Quran", "Hadis riwayat Bukhari", "Hadis riwayat Muslim", "Majalah sekolah"],
-            ans: 1 // Indeks B
+            ans: 1 
         },
         {
             q: "Solat secara duduk boleh dilakukan di atas kerusi dan...",
             options: ["Lantai", "Katil", "Batu", "Pokok yang ditebang"],
-            ans: 0 // Indeks A
+            ans: 0 
         },
         {
             q: "Solat secara mengiring dilakukan dengan ......... menghadap kiblat.",
             options: ["Kaki", "Kepala", "Seluruh badan", "Muka"],
-            ans: 2 // Indeks C
+            ans: 2 
         },
         {
             q: "Qayyum mendirikan solat secara duduk walaupun badannya sihat. Apakah hukumnya?",
             options: ["Sah", "Sunat", "Harus", "Tidak sah"],
-            ans: 3 // Indeks D
+            ans: 3 
         },
         {
             q: "Mengapakah manusia diberikan kelonggaran untuk solat ketika sakit?",
             options: ["Untuk mengurangkan beban ketika solat", "Untuk menggalakkan manusia mendirikan solat", "Untuk menunjuk Islam itu sempurna", "Untuk memastikan keselesaan terjamin"],
-            ans: 0 // Indeks A
+            ans: 0 
         }
     ];
 
@@ -177,7 +177,8 @@
 
     function loadQuestion() {
         const currentData = questions[currentIndex];
-        progText.innerText = Soalan ${currentIndex + 1} / ${questions.length};
+        // Menggunakan backticks (`) untuk template literal
+        progText.innerText = `Soalan ${currentIndex + 1} / ${questions.length}`;
         qText.innerText = currentData.q;
         optGrid.innerHTML = '';
 
@@ -194,7 +195,6 @@
         const correctIdx = questions[currentIndex].ans;
         const allBtns = optGrid.querySelectorAll('.opt-btn');
 
-        // Disable all buttons after selection
         allBtns.forEach(b => b.style.pointerEvents = 'none');
 
         if (selected === correctIdx) {
@@ -218,7 +218,8 @@
     function showResults() {
         qScreen.style.display = 'none';
         rScreen.style.display = 'block';
-        document.getElementById('score-display').innerText = ${score}/${questions.length};
+        // Menggunakan backticks (`) untuk paparan skor
+        document.getElementById('score-display').innerText = `${score}/${questions.length}`;
         
         let feedback = "";
         if(score === 5) feedback = "Cemerlang! Anda memahami tajuk Rukhsah Solat.";
