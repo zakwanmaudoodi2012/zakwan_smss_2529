@@ -1,1 +1,235 @@
-hello z
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuiz Interaktif: Solat Ketika Sakit</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #27ae60;
+            --bg-color: #ecf0f1;
+            --text-color: #2c3e50;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 10px;
+        }
+
+        #quiz-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 550px;
+            transition: transform 0.3s ease;
+        }
+
+        .header {
+            border-bottom: 2px solid var(--bg-color);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+        }
+
+        .progress-text {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #7f8c8d;
+        }
+
+        .question-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+        }
+
+        .options-grid {
+            display: grid;
+            gap: 12px;
+        }
+
+        .opt-btn {
+            background: #fff;
+            border: 2px solid #dfe6e9;
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: left;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+        }
+
+        .opt-btn:hover {
+            border-color: var(--accent-color);
+            background-color: #f9fdfb;
+        }
+
+        .opt-btn.correct {
+            background-color: #27ae60;
+            color: white;
+            border-color: #27ae60;
+        }
+
+        .opt-btn.wrong {
+            background-color: #e74c3c;
+            color: white;
+            border-color: #e74c3c;
+        }
+
+        #result-screen {
+            display: none;
+            text-align: center;
+        }
+
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 0 auto 1.5rem;
+        }
+
+        .restart-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+<div id="quiz-card">
+    <div id="question-screen">
+        <div class="header">
+            <span class="progress-text" id="progress-text">Soalan 1/5</span>
+        </div>
+        <div class="question-text" id="question-text">Pemuatan soalan...</div>
+        <div class="options-grid" id="options-grid"></div>
+    </div>
+
+    <div id="result-screen">
+        <h2>Tahniah! Anda Selesai</h2>
+        <div class="score-circle" id="score-display">0/5</div>
+        <p id="feedback-text"></p>
+        <button class="restart-btn" onclick="location.reload()">Mula Semula</button>
+    </div>
+</div>
+
+<script>
+    const questions = [
+        {
+            q: "“Solatlah sambil berdiri. Jika tidak mampu, boleh duduk. Jika tidak mampu juga boleh sambil berbaring”. Petikan ini diambil dari:",
+            options: ["Al Quran", "Hadis riwayat Bukhari", "Hadis riwayat Muslim", "Majalah sekolah"],
+            ans: 1 // Indeks B
+        },
+        {
+            q: "Solat secara duduk boleh dilakukan di atas kerusi dan...",
+            options: ["Lantai", "Katil", "Batu", "Pokok yang ditebang"],
+            ans: 0 // Indeks A
+        },
+        {
+            q: "Solat secara mengiring dilakukan dengan ......... menghadap kiblat.",
+            options: ["Kaki", "Kepala", "Seluruh badan", "Muka"],
+            ans: 2 // Indeks C
+        },
+        {
+            q: "Qayyum mendirikan solat secara duduk walaupun badannya sihat. Apakah hukumnya?",
+            options: ["Sah", "Sunat", "Harus", "Tidak sah"],
+            ans: 3 // Indeks D
+        },
+        {
+            q: "Mengapakah manusia diberikan kelonggaran untuk solat ketika sakit?",
+            options: ["Untuk mengurangkan beban ketika solat", "Untuk menggalakkan manusia mendirikan solat", "Untuk menunjuk Islam itu sempurna", "Untuk memastikan keselesaan terjamin"],
+            ans: 0 // Indeks A
+        }
+    ];
+
+    let currentIndex = 0;
+    let score = 0;
+
+    const qText = document.getElementById('question-text');
+    const optGrid = document.getElementById('options-grid');
+    const progText = document.getElementById('progress-text');
+    const qScreen = document.getElementById('question-screen');
+    const rScreen = document.getElementById('result-screen');
+
+    function loadQuestion() {
+        const currentData = questions[currentIndex];
+        progText.innerText = Soalan ${currentIndex + 1} / ${questions.length};
+        qText.innerText = currentData.q;
+        optGrid.innerHTML = '';
+
+        currentData.options.forEach((opt, i) => {
+            const btn = document.createElement('button');
+            btn.className = 'opt-btn';
+            btn.innerText = opt;
+            btn.onclick = () => checkAnswer(i, btn);
+            optGrid.appendChild(btn);
+        });
+    }
+
+    function checkAnswer(selected, btn) {
+        const correctIdx = questions[currentIndex].ans;
+        const allBtns = optGrid.querySelectorAll('.opt-btn');
+
+        // Disable all buttons after selection
+        allBtns.forEach(b => b.style.pointerEvents = 'none');
+
+        if (selected === correctIdx) {
+            btn.classList.add('correct');
+            score++;
+        } else {
+            btn.classList.add('wrong');
+            allBtns[correctIdx].classList.add('correct');
+        }
+
+        setTimeout(() => {
+            currentIndex++;
+            if (currentIndex < questions.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }, 1200);
+    }
+
+    function showResults() {
+        qScreen.style.display = 'none';
+        rScreen.style.display = 'block';
+        document.getElementById('score-display').innerText = ${score}/${questions.length};
+        
+        let feedback = "";
+        if(score === 5) feedback = "Cemerlang! Anda memahami tajuk Rukhsah Solat.";
+        else if(score >= 3) feedback = "Bagus! Teruskan mengulang kaji.";
+        else feedback = "Sila baca semula topik Solat Ketika Sakit.";
+        
+        document.getElementById('feedback-text').innerText = feedback;
+    }
+
+    loadQuestion();
+</script>
+
+</body>
+</html>
